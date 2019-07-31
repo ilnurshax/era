@@ -1,0 +1,19 @@
+{
+    "name": "ilnurshax/era",
+    "description": "The package with helps to develop the RAD and DDD applications",
+    "authors": [
+        {
+            "name": "nur.shax",
+            "email": "ilnur888@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/Support/Helpers/helpers.php"
+        ],
+        "psr-4": {
+            "Ilnurshax\\Era\\": "src/"
+        }
+    }
+}
