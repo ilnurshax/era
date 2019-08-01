@@ -7,13 +7,22 @@
             "email": "ilnur888@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.0.0"
+    },
     "autoload": {
         "files": [
             "src/Support/Helpers/helpers.php"
         ],
         "psr-4": {
             "Ilnurshax\\Era\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ilnurshax\\Era\\Database\\DatabaseAdditionalSettingsServiceProvider"
+            ]
         }
     }
 }
