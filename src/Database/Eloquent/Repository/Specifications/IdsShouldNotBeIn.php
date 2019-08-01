@@ -15,7 +15,7 @@ use Ilnurshax\Era\Database\Eloquent\Repository\Repository;
 use Ilnurshax\Era\Specifications\Specification;
 use Ilnurshax\Era\Specifications\SpecificationAsQuery;
 
-class IdsShouldBeIn implements Specification, SpecificationAsQuery
+class IdsShouldNotBeIn implements Specification, SpecificationAsQuery
 {
 
     /**
@@ -37,21 +37,21 @@ class IdsShouldBeIn implements Specification, SpecificationAsQuery
     public function check(Collection $models)
     {
         $count = $models
-            // Reject all models which IDs present in the given IDs list
-            ->reject(function (Model $model, $key) {
+            // Keep all models which IDs present in the given IDs list
+            ->filter(function (Model $model, $key) {
                 return in_array($model->id, $this->ids);
             })
             ->count();
 
         /**
          * The resulting count should be 0, because the result collection should be empty.
-         * Otherwise it means the collection contains some model which ID not present in the given IDs list.
+         * Otherwise it means the collection contains some model which ID is present in the given IDs list.
          */
         return $count == 0;
     }
 
     public function asQuery($query)
     {
-        Repository::instance()->queryIdsIn($query, $this->ids);
+        Repository::instance()->queryIdsNotIn($query, $this->ids);
     }
 }

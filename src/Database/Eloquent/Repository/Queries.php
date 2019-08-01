@@ -17,6 +17,20 @@ trait Queries
 {
 
     /**
+     * Query the models which has at least one of the given relation record in database
+     *
+     * @param Builder $query
+     * @param string $relation
+     * @return $this
+     */
+    public function queryHas($query, string $relation)
+    {
+        $query->has($relation);
+
+        return $this;
+    }
+
+    /**
      * Query the models which has the exists given clause
      *
      * @param $query
