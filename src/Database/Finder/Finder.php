@@ -46,36 +46,6 @@ abstract class Finder
     protected $applyPagination = true;
 
     /**
-     * Set the limit count of the query
-     *
-     * @param $limit
-     * @return Finder
-     */
-    public function setLimit($limit)
-    {
-        if (!empty($limit)) {
-            $this->limit = $limit;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the offset of the query
-     *
-     * @param $offset
-     * @return Finder
-     */
-    public function setOffset($offset)
-    {
-        if (!empty($offset)) {
-            $this->offset = $offset;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the flag to describe does the finder should get the 'total' records count or not
      *
      * @param bool $with
@@ -117,6 +87,36 @@ abstract class Finder
     }
 
     /**
+     * Set the limit count of the query
+     *
+     * @param $limit
+     * @return Finder
+     */
+    public function setLimit($limit)
+    {
+        if (!empty($limit)) {
+            $this->limit = $limit;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the offset of the query
+     *
+     * @param $offset
+     * @return Finder
+     */
+    public function setOffset($offset)
+    {
+        if (!empty($offset)) {
+            $this->offset = $offset;
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the result collection of the Query
      *
      * @param array $searches
@@ -148,6 +148,31 @@ abstract class Finder
     abstract protected function buildQuery(array $searches = []);
 
     /**
+     * Set the total rows count from the given query
+     *
+     * @param Builder $query
+     * @return $this
+     */
+    protected function setTotalFromQuery($query)
+    {
+        if ($query instanceof Builder) {
+            /**
+             * We should call the method which properly count the rows count
+             * even if the 'groupBy' has been set
+             */
+            $count = $query->getQuery()->getCountForPagination();
+        } elseif ($query instanceof Collection) {
+            $count = $query->count();
+        } else {
+            throw new \Exception("The count() function is not defined for the query [".get_class($query)."].");
+        }
+
+        $this->setTotal($count);
+
+        return $this;
+    }
+
+    /**
      * Set the total records count by the finder
      *
      * @param $count
@@ -158,60 +183,6 @@ abstract class Finder
         $this->total = $count;
 
         return $this;
-    }
-
-    /**
-     * Build your own collection with your own conditions by the given Query
-     *
-     * @param Builder|Collection $query
-     * @return Collection
-     */
-    abstract protected function getCollectionFromQuery($query);
-
-    /**
-     * Returns the total records count by the finder query
-     *
-     * @return int
-     */
-    public function total(): int
-    {
-        return $this->total;
-    }
-
-    /**
-     * Returns the limit count
-     *
-     * @return int
-     */
-    public function limit(): int
-    {
-        return $this->limit;
-    }
-
-    /**
-     * Returns the offset count
-     *
-     * @return int
-     */
-    public function offset(): int
-    {
-        return $this->offset;
-    }
-
-    /**
-     * Returns the meta information of the finder
-     *
-     * @return array
-     */
-    public function meta()
-    {
-        return [
-            'meta' => [
-                'offset' => $this->offset(),
-                'limit'  => $this->limit(),
-                'total'  => $this->total(),
-            ]
-        ];
     }
 
     /**
@@ -236,27 +207,56 @@ abstract class Finder
     }
 
     /**
-     * Set the total rows count from the given query
+     * Build your own collection with your own conditions by the given Query
      *
-     * @param Builder $query
-     * @return $this
+     * @param Builder|Collection $query
+     * @return Collection
      */
-    protected function setTotalFromQuery($query)
+    abstract protected function getCollectionFromQuery($query);
+
+    /**
+     * Returns the meta information of the finder
+     *
+     * @return array
+     */
+    public function meta()
     {
-        if ($query instanceof Builder) {
-            /**
-             * We should call the method which properly count the rows count
-             * even if the 'groupBy' has been set
-             */
-            $count = $query->getQuery()->getCountForPagination();
-        } elseif ($query instanceof Collection) {
-            $count = $query->count();
-        } else {
-            throw new \Exception("The count() function is not defined for the query [".get_class($query)."].");
-        }
+        return [
+            'meta' => [
+                'offset' => $this->offset(),
+                'limit'  => $this->limit(),
+                'total'  => $this->total(),
+            ]
+        ];
+    }
 
-        $this->setTotal($count);
+    /**
+     * Returns the offset count
+     *
+     * @return int
+     */
+    public function offset(): int
+    {
+        return $this->offset;
+    }
 
-        return $this;
+    /**
+     * Returns the limit count
+     *
+     * @return int
+     */
+    public function limit(): int
+    {
+        return $this->limit;
+    }
+
+    /**
+     * Returns the total records count by the finder query
+     *
+     * @return int
+     */
+    public function total(): int
+    {
+        return $this->total;
     }
 }

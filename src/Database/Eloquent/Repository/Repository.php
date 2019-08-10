@@ -66,6 +66,15 @@ class Repository extends Container
     public $columns = ['*'];
 
     /**
+     * @var null|string The column to sort by
+     */
+    public $orderByColumn = null;
+    /**
+     * @var bool The sorting order
+     */
+    public $orderByDesc = true;
+
+    /**
      * Repository constructor.
      */
     public function __construct()
@@ -149,6 +158,22 @@ class Repository extends Container
     {
         $repository = clone $this;
         $repository->onlyTrashed = true;
+
+        return $repository;
+    }
+
+    /**
+     * Apply sorting by the some column
+     *
+     * @param string $column
+     * @param bool $desc
+     * @return Repository
+     */
+    public function orderBy(string $column, $desc = true)
+    {
+        $repository = clone $this;
+        $repository->orderByColumn = $column;
+        $repository->orderByDesc = $desc;
 
         return $repository;
     }
@@ -294,6 +319,10 @@ class Repository extends Container
         $query = $this->instantiateATargetModel()::query();
 
         $this->queryTrashedModelsByTrashedFlags($query);
+
+        if (!empty($this->orderByColumn)) {
+            $this->queryOrderBy($query, $this->orderByColumn, $this->orderByDesc ? 'desc' : 'asc');
+        }
 
         if (method_exists($this, 'restrictQuery')) {
             $this->restrictQuery($query);
