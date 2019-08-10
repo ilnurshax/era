@@ -217,6 +217,19 @@ class Repository extends Container
     }
 
     /**
+     * Determine if any model exists for the given specifications
+     *
+     * @param null $specifications
+     * @return bool
+     */
+    public function existsBySpecifications($specifications = null)
+    {
+        $query = $this->queryBySpecifications($specifications);
+
+        return $query->exists();
+    }
+
+    /**
      * Returns the Random First Model by the given specifications with all relations loaded
      *
      * @param null|array|Collection|SpecificationAsQuery $specifications
