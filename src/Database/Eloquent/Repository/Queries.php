@@ -145,21 +145,6 @@ trait Queries
     }
 
     /**
-     * Adds a rule to the given Query to query the record with the given ID's
-     *
-     * @param Builder $query
-     * @param iterable $ids
-     * @param bool $not
-     * @return $this
-     */
-    public function queryByIdsIn($query, iterable $ids, bool $not = false)
-    {
-        $query->whereIn('id', $ids, 'and', $not);
-
-        return $this;
-    }
-
-    /**
      * Queries only not deleted records
      *
      * @param Builder $query
