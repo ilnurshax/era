@@ -250,13 +250,18 @@ class Repository extends Container
      * Returns the Collection of Models by the given specifications with all relations loaded
      *
      * @param null|array|Collection|SpecificationAsQuery $specifications
+     * @param \Closure|null $map
      * @return Collection
      */
-    public function allBySpecifications($specifications = null)
+    public function allBySpecifications($specifications = null, \Closure $map = null)
     {
         $query = $this->queryBySpecifications($specifications);
 
         $collection = $query->get();
+
+        if ($map instanceof \Closure) {
+            $collection = $collection->map($map);
+        }
 
         return $collection;
     }
