@@ -31,6 +31,20 @@ trait Queries
     }
 
     /**
+     * Query the models which doesn't have the given relation record in database
+     *
+     * @param Builder $query
+     * @param string $relation
+     * @return $this
+     */
+    public function queryDoesntHave($query, string $relation)
+    {
+        $query->doesntHave($relation);
+
+        return $this;
+    }
+
+    /**
      * Query the models which has the exists given clause
      *
      * @param $query
