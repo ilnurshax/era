@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 
-if (!function_exists(request_id())) {
+if (!function_exists('request_id')) {
     /**
      * Generates the unique id for the current request lifecycle
      *
