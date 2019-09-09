@@ -1,5 +1,25 @@
 <?php
 
+use Illuminate\Support\Str;
+
+if (!function_exists(request_id())) {
+    /**
+     * Generates the unique id for the current request lifecycle
+     *
+     * @return string
+     */
+    function request_id()
+    {
+        static $request_id;
+
+        if (empty($request_id)) {
+            $request_id = Str::random();
+        }
+
+        return $request_id;
+    }
+}
+
 if (!function_exists('events')) {
     /**
      * Fire the given events
@@ -97,44 +117,9 @@ if (!function_exists('validation_failed')) {
 }
 
 if (!function_exists('frontend()')) {
-    function frontend() {
+    function frontend()
+    {
         return \Application\Frontend\Frontend::make();
-    }
-}
-
-if (!function_exists('geo')) {
-    /**
-     * Returns the GeoLocation instance
-     *
-     * @return \Application\GeoLocation\GeoLocation
-     */
-    function geo()
-    {
-        static $geo;
-
-        if (empty($geo)) {
-            $geo = new \Application\GeoLocation\GeoLocation;
-        }
-
-        return $geo;
-    }
-}
-
-if (!function_exists('disable_geoip_ad')) {
-    function disable_geoip_ad($codes)
-    {
-        /* disable GeoIP ads manually */
-        return true;
-
-        if (empty($codes) || empty(geo()->countryCode()->value())) {
-            return true;
-        }
-
-        $codes = explode(",", str_replace(' ', '', strtolower(trim($codes))));
-
-        $userCountryCode = strtolower(geo()->countryCode());
-
-        return !in_array($userCountryCode, $codes);
     }
 }
 
@@ -173,7 +158,8 @@ if (!function_exists('validation_failed_unless')) {
 }
 
 if (!function_exists('msr')) {
-    function msr(string $comment, array $data = []) {
+    function msr(string $comment, array $data = [])
+    {
         logger(measure($comment), $data);
     }
 }
