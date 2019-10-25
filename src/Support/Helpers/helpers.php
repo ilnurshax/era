@@ -170,7 +170,7 @@ if (!function_exists('measure')) {
         /** @var \Carbon\Carbon|null $previous */
         static $previous;
 
-        $current = now();
+        $current = \Carbon\Carbon::now();
 
         if (!empty($previous)) {
             $diffBetweenPreviousAndCurrent = " |^| Diff: {$previous->diffInMicroseconds($current)} ms";
