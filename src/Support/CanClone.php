@@ -25,7 +25,7 @@ trait CanClone
         $this->clearCloned();
 
         foreach ($objects as $object) {
-            $this->cloned[] = clone $object;
+            $this->cloned[] = clone value($object);
         }
 
         return $this;
@@ -34,10 +34,10 @@ trait CanClone
     /**
      * Pipes the cloned objects over given closure
      *
-     * @param callable $closure
+     * @param \Closure $closure
      * @return $this
      */
-    public function cloned(callable $closure)
+    public function cloned(\Closure $closure)
     {
         $closure(...$this->cloned);
 
