@@ -9,13 +9,15 @@
 namespace Ilnurshax\Era\Support;
 
 
+use Illuminate\Support\Collection;
+
 trait CanClone
 {
 
     protected $cloned;
 
     /**
-     * Clone the given objects and save the cloned objects to itself
+     * Clone the given objects
      *
      * @param array ...$objects
      * @return $this
@@ -25,7 +27,17 @@ trait CanClone
         $this->clearCloned();
 
         foreach ($objects as $object) {
-            $this->cloned[] = clone value($object);
+            $value = value($object);
+
+            if ($value instanceof Collection) {
+                $this->cloned[] = clone $value->map(function ($item, $key) {
+                    return clone $item;
+                });
+
+                continue;
+            }
+
+            $this->cloned[] = clone $value;
         }
 
         return $this;
