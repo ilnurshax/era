@@ -34,7 +34,7 @@ class Money
 
     public function __construct(int $cents = 0)
     {
-        $this->cents = abs($cents);
+        $this->cents = $cents;
     }
 
     /**************************************************************************
@@ -114,6 +114,16 @@ class Money
      * Operations
      *
      **************************************************************************/
+
+    public function invert(): Money
+    {
+        return new static($this->asCents() * -1);
+    }
+
+    public function abs(): Money
+    {
+        return new static(abs($this->asCents()));
+    }
 
     public function sub(Money $money): Money
     {
