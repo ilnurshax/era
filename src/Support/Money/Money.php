@@ -12,10 +12,11 @@ class Money
      */
     private $cents;
 
-    public function __construct(int $cents = 0)
-    {
-        $this->cents = $cents;
-    }
+    /**************************************************************************
+     *
+     * Creation
+     *
+     **************************************************************************/
 
     public static function createFromDollars(?float $dollars)
     {
@@ -26,14 +27,25 @@ class Money
         return new static((int)round($dollars * 100)); // Fix bug
     }
 
-    public function __toString()
-    {
-        return '$' . $this->asDollars();
-    }
-
     public static function createFromCents(?int $cents)
     {
         return new static($cents ?? 0);
+    }
+
+    public function __construct(int $cents = 0)
+    {
+        $this->cents = $cents;
+    }
+
+    /**************************************************************************
+    *
+    * Casts
+    *
+    **************************************************************************/
+
+    public function __toString()
+    {
+        return '$' . $this->asDollars();
     }
 
     public function asCents(): int
@@ -46,6 +58,12 @@ class Money
         return $this->cents / 100;
     }
 
+    /**************************************************************************
+    *
+    * Conditions
+    *
+    **************************************************************************/
+
     public function gt(Money $money): bool
     {
         return $this->asCents() > $money->asCents();
@@ -56,14 +74,19 @@ class Money
         return $this->asCents() >= $money->asCents();
     }
 
+    public function eq(Money $money): bool
+    {
+        return $this->asCents() == $money->asCents();
+    }
+
     public function lt(Money $money): bool
     {
         return $this->asCents() < $money->asCents();
     }
 
-    public function eq(Money $money): bool
+    public function ne(Money $money): bool
     {
-        return $this->asCents() == $money->asCents();
+        return !$this->eq($money);
     }
 
     public function eqZero(): bool
@@ -81,6 +104,17 @@ class Money
         return $this->asCents() < 0;
     }
 
+    public function lteZero(): bool
+    {
+        return $this->asCents() <= 0;
+    }
+
+    /**************************************************************************
+    *
+    * Operations
+    *
+    **************************************************************************/
+
     public function invert(): Money
     {
         return new static($this->asCents() * -1);
@@ -96,13 +130,8 @@ class Money
         return static::createFromCents($this->asCents() + $money->asCents());
     }
 
-    public function ne(Money $money): bool
+    public function percents(float $percents)
     {
-        return !$this->eq($money);
-    }
-
-    public function lteZero(): bool
-    {
-        return $this->asCents() <= 0;
+        return static::createFromCents($this->asCents() * $percents);
     }
 }
