@@ -34,7 +34,7 @@ class Money
 
     public function __construct(int $cents = 0)
     {
-        $this->cents = $cents;
+        $this->cents = abs($cents);
     }
 
     /**************************************************************************
