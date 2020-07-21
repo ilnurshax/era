@@ -115,11 +115,6 @@ class Money
      *
      **************************************************************************/
 
-    public function invert(): Money
-    {
-        return new static($this->asCents() * -1);
-    }
-
     public function sub(Money $money): Money
     {
         return static::createFromCents($this->asCents() - $money->asCents());
