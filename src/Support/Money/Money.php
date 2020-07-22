@@ -84,6 +84,11 @@ class Money
         return $this->asCents() < $money->asCents();
     }
 
+    public function lte(Money $money): bool
+    {
+        return $this->asCents() <= $money->asCents();
+    }
+
     public function ne(Money $money): bool
     {
         return !$this->eq($money);
