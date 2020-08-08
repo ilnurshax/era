@@ -41,6 +41,12 @@ class PhoneNumber implements Rule
      */
     public function message()
     {
-        return trans('validation.phone_number');
+        $message = trans('validation.phone_number');
+
+        if (!is_string($message)) {
+            return 'The :attribute should contain the correct phone number in the E.164 international format.';
+        }
+
+        return $message;
     }
 }
