@@ -9,6 +9,10 @@
 namespace Ilnurshax\Era\Database\Eloquent\Repository;
 
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use Ilnurshax\Era\Database\Relations\RelationsLibrary;
 use Ilnurshax\Era\Specifications\CanPipeSpecifications;
 use Ilnurshax\Era\Specifications\SpecificationAsQuery;
@@ -16,10 +20,6 @@ use Ilnurshax\Era\Support\CanClone;
 use Ilnurshax\Era\Support\CanDebug;
 use Ilnurshax\Era\Support\CanPipeClosures;
 use Ilnurshax\Era\Support\Container\Container;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
 
 /**
  * Class Repository
@@ -264,6 +264,17 @@ class Repository extends Container
         }
 
         return $collection;
+    }
+
+    /**
+     * Returns the records count by the given specifications
+     *
+     * @param  null|array|Collection|SpecificationAsQuery  $specifications
+     * @return int
+     */
+    public function countBySpecifications($specifications = null)
+    {
+        return $this->queryBySpecifications($specifications)->count();
     }
 
     /**
