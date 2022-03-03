@@ -50,7 +50,11 @@ class QueueController extends Controller
             return $this->forInvalidId();
         }
 
-        $exitCode = Artisan::call('queue:forget', ['id' => $id]);
+        if ($id === 'all') {
+            $exitCode = Artisan::call('queue:flush');
+        } else {
+            $exitCode = Artisan::call('queue:forget', ['id' => $id]);
+        }
 
         return response()->json(['success' => $exitCode === 0]);
     }
