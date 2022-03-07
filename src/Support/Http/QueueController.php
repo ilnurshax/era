@@ -22,7 +22,7 @@ class QueueController extends Controller
             ->table($this->tableName())
             ->get()
             ->map(function ($failedJob) {
-                return [
+                $failedJobData = [
                     'id'         => $failedJob->id,
                     'queue'      => $failedJob->queue,
                     'payload'    => $failedJob->payload,
@@ -30,6 +30,12 @@ class QueueController extends Controller
                     'created_at' => Carbon::createFromFormat(Carbon::DEFAULT_TO_STRING_FORMAT, $failedJob->failed_at)
                         ->toIso8601String(),
                 ];
+
+                if (!empty($failedJob->uuid)) {
+                    $failedJobData['uuid'] = $failedJob->uuid;
+                }
+
+                return $failedJobData;
             });
     }
 
