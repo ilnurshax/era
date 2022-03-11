@@ -39,23 +39,15 @@ class QueueController extends Controller
             });
     }
 
-    public function retry()
+    public function retry(string $id)
     {
-        if (empty($id = request()->input('id'))) {
-            return $this->forInvalidId();
-        }
-
         $exitCode = Artisan::call('queue:retry', ['id' => $id]);
 
         return response()->json(['success' => $exitCode === 0]);
     }
 
-    public function delete()
+    public function delete(string $id)
     {
-        if (empty($id = request()->input('id'))) {
-            return $this->forInvalidId();
-        }
-
         if ($id === 'all') {
             $exitCode = Artisan::call('queue:flush');
         } else {
