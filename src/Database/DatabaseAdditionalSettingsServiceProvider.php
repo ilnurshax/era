@@ -35,7 +35,7 @@ class DatabaseAdditionalSettingsServiceProvider extends ServiceProvider
     {
         if (env('APP_DEBUG') && env('DB_ENABLE_LOG')) {
             DB::listen(function (QueryExecuted $query) {
-                logger()->warning('(' . $query->time . ' ms) ' . $query->sql, ['bindings' => $query->bindings]);
+                logger()->warning('['.$query->connection.'] (' . $query->time . ' ms) ' . $query->sql, ['bindings' => $query->bindings]);
             });
         }
     }
